@@ -1,0 +1,33 @@
+{
+    "name": "@yowasp/openfpgaloader",
+    "version": null,
+    "description": "WebUSB port of openFPGALoader, universal utility for programming FPGA",
+    "author": "Catherine <whitequark@whitequark.org>",
+    "license": "ISC",
+    "homepage": "https://yowasp.org/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YoWASP/openFPGALoader-web.git"
+    },
+    "bugs": {
+        "url": "https://github.com/YoWASP/openFPGALoader-web/issues"
+    },
+    "type": "module",
+    "files": [
+        "lib/api.d.ts",
+        "gen/bundle.js",
+        "gen/openFPGALoader.worker.js",
+        "gen/openFPGALoader.wasm"
+    ],
+    "exports": {
+        "browser": "./gen/bundle.js",
+        "types": "./lib/api.d.ts"
+    },
+    "types": "./lib/api.d.ts",
+    "devDependencies": {
+        "esbuild": "^0.19.8"
+    },
+    "scripts": {
+        "build": "esbuild --bundle lib/api.js --outfile=gen/bundle.js --format=esm --platform=browser"
+    }
+}

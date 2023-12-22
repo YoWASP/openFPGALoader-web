@@ -1,0 +1,18 @@
+[submodule "emsdk"]
+	path = emsdk
+	url = https://github.com/emscripten-core/emsdk.git
+[submodule "libusb"]
+	path = libusb-src
+	url = https://github.com/libusb/libusb/
+[submodule "zlib"]
+	path = zlib-src
+	url = https://github.com/madler/zlib
+[submodule "libftdi"]
+	path = libftdi-src
+	url = git://developer.intra2net.com/libftdi
+[submodule "openFPGALoader"]
+	path = openFPGALoader-src
+	url = https://github.com/trabucayre/openFPGALoader
+[submodule "hidapi-src"]
+	path = hidapi-src
+	url = https://github.com/libusb/hidapi
