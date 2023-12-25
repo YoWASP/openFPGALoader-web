@@ -17,12 +17,12 @@ function makeTerminalWrite({ print = null, printLine = null }) {
                 terminalBuffer.push(charCode);
             // flush explicitly, on CR and LF; this avoids flickering of progress messages
             if (charCode === null || charCode === 10 || charCode == 13)
-                print(new TextDecoder().decode(new Uint8Array(terminalBuffer.splice(0))));
+                print(String.fromCharCode(...terminalBuffer.splice(0)));
         } else if (printLine !== null) {
             // only flush on LF
             if (charCode === null) {
             } else if (charCode === 10) {
-                printLine(new TextDecoder().decode(new Uint8Array(terminalBuffer.splice(0))));
+                printLine(String.fromCharCode(...terminalBuffer.splice(0)));
             } else {
                 terminalBuffer.push(charCode);
             }
