@@ -1,0 +1,22 @@
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+name: Track upstream activity
+jobs:
+  track-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: true
+          token: ${{ secrets.PUSH_TOKEN }}
+      - name: Update upstream code
+        run: |
+          git -C openFPGALoader-src pull --ff-only origin master
+      - name: Push updated code
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: '[autorelease] Update dependencies.'
