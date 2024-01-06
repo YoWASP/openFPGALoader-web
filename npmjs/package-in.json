@@ -25,6 +25,7 @@
     },
     "types": "./lib/api.d.ts",
     "devDependencies": {
+        "@yowasp/runtime": "^6.0",
         "esbuild": "^0.19.8"
     },
     "scripts": {

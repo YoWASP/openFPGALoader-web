@@ -2,6 +2,9 @@ export type Tree = {
     [name: string]: Tree | string | Uint8Array
 };
 
+export type OutputStream =
+    (bytes: Uint8Array | null) => void;
+
 export class Exit extends Error {
     code: number;
     files: Tree;
@@ -9,8 +12,8 @@ export class Exit extends Error {
 
 export type Command = {
     (args?: string[], files?: Tree, options?: {
-        print?: (chars: string) => void,
-        printLine?: (line: string) => void
+        stdout?: OutputStream | null,
+        stderr?: OutputStream | null,
     }): Promise<Tree>;
 
     requiresUSBDevice: {
