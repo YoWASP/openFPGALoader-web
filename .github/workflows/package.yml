@@ -2,22 +2,22 @@ on: [push, pull_request]
 name: Build & publish
 jobs:
   build:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    if: ${{ !contains(github.event.head_commit.message, 'skip ci') }}
     runs-on: ubuntu-latest
     env:
-      RELEASE_BRANCH: "${{ startsWith(github.event.ref, 'refs/heads/develop-') || startsWith(github.event.ref, 'refs/heads/release-') }}"
+      RELEASE_BRANCH: ${{ startsWith(github.event.ref, 'refs/heads/develop-') || startsWith(github.event.ref, 'refs/heads/release-') }}
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
       - name: Install dependencies
         run: sudo apt-get install ccache
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
       - name: Set up caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/ccache
           key: openFPGALoader-${{ hashFiles('emsdk', 'zlib-src', 'libusb-src', 'libftdi-src', 'hidapi-src', 'openFPGALoader-src', 'build.sh') }}
@@ -34,7 +34,7 @@ jobs:
         run: |
           ./package.sh
       - name: Upload NPM package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: npmjs/dist/
@@ -43,7 +43,7 @@ jobs:
           ccache -s
   check: # group all `test (*)` workflows into one for the required status check
     needs: [build]
-    if: always() && !contains(needs.*.result, 'cancelled')
+    if: ${{ always() && !contains(needs.*.result, 'cancelled') }}
     runs-on: ubuntu-latest
     steps:
       - run: ${{ contains(needs.*.result, 'failure') && 'false' || 'true' }}
@@ -53,22 +53,22 @@ jobs:
     environment: publish
     permissions:
       id-token: write
-    if: "!contains(github.event.head_commit.message, 'skip js')"
+    if: ${{ !contains(github.event.head_commit.message, 'skip js') }}
     steps:
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         registry-url: 'https://registry.npmjs.org'
     - name: Download NPM package
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: dist
         path: dist/
     - name: Publish package to NPM (dry run)
-      if: "github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/develop')"
+      if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/develop') }}
       run: npm publish --access public $(find dist -name *.tgz -printf 'file:%p ') --dry-run
     - name: Publish package to NPM
-      if: "github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/release')"
+      if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/release') }}
       run: npm publish --access public $(find dist -name *.tgz -printf 'file:%p ')
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -76,10 +76,10 @@ jobs:
   release:
     needs: check
     runs-on: ubuntu-latest
-    if: "contains(github.event.head_commit.message, 'autorelease') && github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/develop')"
+    if: ${{ contains(github.event.head_commit.message, 'autorelease') && github.event_name == 'push' && startsWith(github.event.ref, 'refs/heads/develop') }}
     steps:
       - name: Check out source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.PUSH_TOKEN }}
