@@ -43,6 +43,7 @@ emcmake cmake -S libftdi-src -B libftdi-build \
 emmake make -C libftdi-build install VERBOSE=1
 
 emcmake cmake -S hidapi-src -B hidapi-build \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_C_COMPILER_LAUNCHER=ccache \
     -DCMAKE_BUILD_TYPE=MinSizeRel \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/prefix" \
